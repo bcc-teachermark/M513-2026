@@ -1,0 +1,738 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{longtable}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{gray!10},
+    frame=single,
+    breaklines=true,
+    showstringspaces=false,
+    keywordstyle=\color{blue},
+    stringstyle=\color{teal},
+    commentstyle=\color{gray}
+}
+
+\newcommand{\checkbox}{$\square$}
+
+\begin{document}
+
+\begin{center}
+    {\Large \textbf{Assignment 02: Measuring Runtime with Python}}\\[6pt]
+    {\large Google Colab, Python, Sorting, and Google Sheets}\\[12pt]
+    Name: \underline{\hspace{2.5in}} \hfill Date: \underline{\hspace{1.5in}}
+\end{center}
+
+\vspace{0.15in}
+
+\section*{What Is This Assignment About?}
+
+In this assignment, you will use Python to measure how long a program takes to run.
+
+Computers can do many tasks very quickly, but not all tasks take the same amount of time. Some tasks take longer when the amount of data gets larger.
+
+You will run a program that sorts lists of random numbers. You will test different list sizes, record the runtimes, and then make a graph.
+
+\subsection*{Main Question}
+
+\begin{center}
+\textbf{What happens to the runtime when the list size gets larger?}
+\end{center}
+
+\subsection*{What You Will Practice}
+
+\begin{itemize}
+    \item Opening and using Google Colab
+    \item Running Python code
+    \item Changing a variable in a program
+    \item Measuring runtime using a timer
+    \item Recording data from program output
+    \item Making a graph in Google Sheets
+    \item Submitting a Python \texttt{.py} file in Microsoft Teams
+\end{itemize}
+
+\section*{What You Need}
+
+\begin{itemize}
+    \item A computer, laptop, Chromebook, or iPad with internet access
+    \item Your own personal Gmail email address
+    \item The Google Chrome web browser, updated to the current version
+    \item Access to Microsoft Teams for Education
+    \item Access to Google Sheets
+\end{itemize}
+
+\noindent
+\textbf{Important:} For this class, please use \textbf{Google Chrome} to open Google Colab. Do not use Safari unless your teacher gives you permission.
+
+\vspace{0.1in}
+
+\noindent
+If you are using an iPad, install or update the \textbf{Google Chrome} app before starting this assignment.
+
+\vspace{0.1in}
+
+\noindent
+If you do not have a personal Gmail email address, you need to create one before starting this assignment.
+
+\begin{center}
+    \url{https://accounts.google.com/signup}
+\end{center}
+
+\section*{What You Will Submit}
+
+You will submit your Python file in Microsoft Teams.
+
+\begin{center}
+\begin{tabular}{|>{\raggedright}p{2.6in}|>{\raggedright\arraybackslash}p{3.4in}|}
+\hline
+\textbf{Submit This} & \textbf{Do Not Submit This} \\
+\hline
+\texttt{RuntimeSorting\_YourName.py} & Any file ending in \texttt{.ipynb} \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent
+Your teacher wants the Python file only. A Python file ends with:
+
+\begin{center}
+\texttt{.py}
+\end{center}
+
+\noindent
+Do \textbf{not} submit the Colab notebook file. A notebook file ends with:
+
+\begin{center}
+\texttt{.ipynb}
+\end{center}
+
+\section*{Part 1: Open the Starter Notebook}
+
+Follow these steps carefully.
+
+\begin{enumerate}
+    \item Open the \textbf{Google Chrome} browser.
+    \item Go to the starter notebook:
+
+    \begin{center}
+    \url{https://colab.research.google.com/github/bcc-teachermark/M513-2026/blob/main/Assignment_02.ipynb}
+    \end{center}
+
+    \item If Google asks you to sign in, sign in using your own personal Gmail email address.
+    \item When the notebook opens, click or tap \textbf{File}.
+    \item Choose \textbf{Save a copy in Drive}.
+    \item Work only on your own saved copy.
+\end{enumerate}
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I opened Google Chrome.
+    \item[\checkbox] I opened the starter Colab notebook.
+    \item[\checkbox] I signed in with my own personal Gmail email address.
+    \item[\checkbox] I saved my own copy in Google Drive.
+\end{itemize}
+
+\section*{Part 2: What Is Google Colab?}
+
+Google Colab is a website where you can write and run Python code in your web browser.
+
+A Colab notebook is made of boxes called \textbf{cells}.
+
+There are two common types of cells:
+
+\begin{center}
+\begin{tabular}{|>{\raggedright}p{1.8in}|>{\raggedright\arraybackslash}p{4.5in}|}
+\hline
+\textbf{Cell Type} & \textbf{What It Does} \\
+\hline
+Text cell & Used for notes, explanations, titles, and instructions. \\
+\hline
+Code cell & Used for writing and running Python code. \\
+\hline
+\end{tabular}
+\end{center}
+
+For this assignment, you will mostly run and edit \textbf{code cells}.
+
+\section*{Part 3: Run the Teacher Setup Cell}
+
+The first code cell in the notebook is the \textbf{Teacher Setup} cell.
+
+This cell loads a teacher-supplied timer called \texttt{CodeTimer}. You do not need to understand how \texttt{CodeTimer} works inside. You only need to know how to use it.
+
+\subsection*{What CodeTimer Does}
+
+\texttt{CodeTimer} measures how long part of a program takes to run.
+
+You will use it like this:
+
+\begin{lstlisting}[style=pythonstyle]
+timer = CodeTimer("My timing test")
+
+timer.start()
+
+# Code to measure goes here
+
+timer.stop()
+\end{lstlisting}
+
+\subsection*{Run the Setup Cell}
+
+\begin{enumerate}
+    \item Find the first code cell.
+    \item Click or tap the play button on the left side of the cell.
+    \item Wait until you see a message that says:
+
+    \begin{center}
+    \texttt{CodeTimer is ready to use.}
+    \end{center}
+\end{enumerate}
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I ran the Teacher Setup cell.
+    \item[\checkbox] I saw the message that \texttt{CodeTimer} is ready.
+\end{itemize}
+
+\section*{Part 4: First Timing Test}
+
+The next code cell is a small first timing test.
+
+It will look similar to this:
+
+\begin{lstlisting}[style=pythonstyle]
+from codetimer import CodeTimer
+
+timer = CodeTimer("My first timing test")
+
+timer.start()
+
+student_name = "Phat"
+print("Hello T. Mark. I am " + student_name + ".")
+
+timer.stop()
+\end{lstlisting}
+
+\subsection*{Your Task}
+
+Change this line:
+
+\begin{lstlisting}[style=pythonstyle]
+student_name = "Phat"
+\end{lstlisting}
+
+so that it uses your own name.
+
+For example:
+
+\begin{lstlisting}[style=pythonstyle]
+student_name = "Boontam"
+\end{lstlisting}
+
+Then run the cell.
+
+\subsection*{What You Should See}
+
+You should see a greeting with your name and a runtime measurement.
+
+Example:
+
+\begin{lstlisting}[style=pythonstyle]
+Hello T. Mark. I am Boontam.
+My first timing test took 123.45 microseconds.
+\end{lstlisting}
+
+\noindent Your exact runtime may be different. That is normal.
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I changed the student name to my own name.
+    \item[\checkbox] I ran the first timing test.
+    \item[\checkbox] I saw a runtime measurement.
+\end{itemize}
+
+\section*{Part 5: The Sorting Runtime Experiment}
+
+Now you will measure how long it takes Python to sort lists of random numbers.
+
+A \textbf{list} is a group of values. In this assignment, each list contains random integers.
+
+The program will sort the numbers from smallest to largest.
+
+\subsection*{The Experiment Question}
+
+\begin{center}
+\textbf{As the list size gets larger, what happens to the runtime?}
+\end{center}
+
+\subsection*{The Code You Will Run}
+
+The sorting experiment cell will look similar to this:
+
+\begin{lstlisting}[style=pythonstyle]
+from codetimer import CodeTimer
+import random
+
+
+def make_random_list(size):
+    numbers = []
+
+    for count in range(size):
+        random_number = random.randint(1, 1000000)
+        numbers.append(random_number)
+
+    return numbers
+
+
+def selection_sort(numbers):
+    for start_index in range(len(numbers)):
+        smallest_index = start_index
+
+        for current_index in range(start_index + 1, len(numbers)):
+            if numbers[current_index] < numbers[smallest_index]:
+                smallest_index = current_index
+
+        numbers[start_index], numbers[smallest_index] = numbers[smallest_index], numbers[start_index]
+
+
+sizes = [100, 200, 400, 800, 1600]
+
+results = []
+
+print("Sorting Runtime Experiment")
+print("--------------------------")
+print()
+
+for list_size in sizes:
+    numbers = make_random_list(list_size)
+
+    timer = CodeTimer("Sorting " + str(list_size) + " numbers")
+
+    timer.start()
+
+    selection_sort(numbers)
+
+    elapsed_time = timer.stop()
+
+    results.append([list_size, elapsed_time])
+
+    print()
+
+print("Copy this table into Google Sheets:")
+print("List Size\tRuntime in Microseconds")
+
+for row in results:
+    print(str(row[0]) + "\t" + str(round(row[1], 2)))
+\end{lstlisting}
+
+\subsection*{Important Line}
+
+This line controls the list sizes:
+
+\begin{lstlisting}[style=pythonstyle]
+sizes = [100, 200, 400, 800, 1600]
+\end{lstlisting}
+
+You will run the experiment once using the original sizes. Then you will change this line and run the experiment again.
+
+\section*{Part 6: First Run}
+
+Run the sorting experiment using the original list sizes:
+
+\begin{center}
+\texttt{100, 200, 400, 800, 1600}
+\end{center}
+
+Record your results below.
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{List Size} & \textbf{Runtime in Microseconds} \\
+\hline
+100 & \\
+\hline
+200 & \\
+\hline
+400 & \\
+\hline
+800 & \\
+\hline
+1600 & \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I ran the sorting experiment with the original list sizes.
+    \item[\checkbox] I recorded the runtime results.
+\end{itemize}
+
+\section*{Part 7: Second Run}
+
+Now change the list sizes.
+
+Find this line in the code:
+
+\begin{lstlisting}[style=pythonstyle]
+sizes = [100, 200, 400, 800, 1600]
+\end{lstlisting}
+
+Change it to:
+
+\begin{lstlisting}[style=pythonstyle]
+sizes = [200, 400, 800, 1600, 3200]
+\end{lstlisting}
+
+Run the sorting experiment again.
+
+Record your new results below.
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{List Size} & \textbf{Runtime in Microseconds} \\
+\hline
+200 & \\
+\hline
+400 & \\
+\hline
+800 & \\
+\hline
+1600 & \\
+\hline
+3200 & \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I changed the list sizes.
+    \item[\checkbox] I ran the sorting experiment a second time.
+    \item[\checkbox] I recorded the new runtime results.
+\end{itemize}
+
+\section*{Part 8: Third Run - Your Choice}
+
+Now choose your own list sizes.
+
+Your list should have at least five values.
+
+You may use one of these examples:
+
+\begin{lstlisting}[style=pythonstyle]
+sizes = [150, 300, 600, 1200, 2400]
+\end{lstlisting}
+
+or
+
+\begin{lstlisting}[style=pythonstyle]
+sizes = [250, 500, 1000, 2000, 4000]
+\end{lstlisting}
+
+or you may create your own.
+
+\subsection*{My List Sizes}
+
+Write the list sizes you chose:
+
+\vspace{0.3in}
+
+\noindent
+\underline{\hspace{6.2in}}
+
+\vspace{0.2in}
+
+\subsection*{My Third Run Results}
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{List Size} & \textbf{Runtime in Microseconds} \\
+\hline
+ & \\
+\hline
+ & \\
+\hline
+ & \\
+\hline
+ & \\
+\hline
+ & \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I chose my own list sizes.
+    \item[\checkbox] I ran the experiment with my own list sizes.
+    \item[\checkbox] I recorded the runtime results.
+\end{itemize}
+
+\section*{Part 9: Make a Graph in Google Sheets}
+
+Now you will make a graph of your results.
+
+The graph should show:
+
+\begin{center}
+\textbf{List Size vs. Runtime}
+\end{center}
+
+\subsection*{Steps}
+
+\begin{enumerate}
+    \item Open Google Sheets.
+    \item Create a blank spreadsheet.
+    \item In cell A1, type:
+
+    \begin{center}
+    \texttt{List Size}
+    \end{center}
+
+    \item In cell B1, type:
+
+    \begin{center}
+    \texttt{Runtime in Microseconds}
+    \end{center}
+
+    \item Enter the results from one of your runs.
+    \item Highlight your data.
+    \item Click or tap \textbf{Insert}.
+    \item Click or tap \textbf{Chart}.
+    \item Choose a \textbf{line chart} or \textbf{scatter chart}.
+    \item Make sure the x-axis is \textbf{List Size}.
+    \item Make sure the y-axis is \textbf{Runtime in Microseconds}.
+\end{enumerate}
+
+\subsection*{What to Look For}
+
+Look at the shape of the graph.
+
+Ask yourself:
+
+\begin{itemize}
+    \item Does the runtime increase as the list size gets larger?
+    \item Does the graph look like a straight line?
+    \item Does the graph curve upward?
+    \item Did doubling the list size exactly double the runtime?
+\end{itemize}
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I entered my data into Google Sheets.
+    \item[\checkbox] I made a graph.
+    \item[\checkbox] My graph shows list size and runtime.
+\end{itemize}
+
+\section*{Part 10: Reflection Questions}
+
+Answer these questions in complete sentences.
+
+\begin{enumerate}
+    \item What happened to the runtime as the list size became larger?
+
+    \vspace{0.5in}
+
+    \item Did doubling the list size exactly double the runtime? Explain your answer.
+
+    \vspace{0.5in}
+
+    \item Which list size took the longest to sort?
+
+    \vspace{0.5in}
+
+    \item Why might your runtime results be different from another student's results?
+
+    \vspace{0.5in}
+
+    \item Look at your graph. Does the runtime grow in a straight line, or does it curve upward?
+
+    \vspace{0.5in}
+
+    \item What is one thing you changed in the Python code yourself?
+
+    \vspace{0.5in}
+\end{enumerate}
+
+\section*{Part 11: iPad Tips}
+
+If you are using an iPad, these tips will help.
+
+\begin{itemize}
+    \item Use the \textbf{Chrome} app, not Safari.
+    \item Turn your iPad sideways into \textbf{landscape mode}. This gives you more space.
+    \item Tap inside a code cell before typing.
+    \item Tap the play button to run the code.
+    \item If the keyboard covers part of the screen, scroll slightly or turn the iPad sideways.
+    \item If you have an external keyboard for your iPad, you may use it, but it is not required.
+    \item Make sure your iPad is connected to Wi-Fi.
+\end{itemize}
+
+\section*{Part 12: Common Problems and Fixes}
+
+\begin{center}
+\begin{longtable}{|>{\raggedright}p{2.2in}|>{\raggedright\arraybackslash}p{4.1in}|}
+\hline
+\textbf{Problem} & \textbf{What to Check} \\
+\hline
+I am using Safari. & Close Safari and open Google Colab in the Chrome app instead. \\
+\hline
+I cannot edit the notebook. & Make sure you chose \textbf{File} then \textbf{Save a copy in Drive}. Work on your own copy. \\
+\hline
+Nothing happens when I type. & Make sure you clicked or tapped inside a code cell. \\
+\hline
+The play button is missing. & Click or tap inside the code cell. The play button usually appears on the left. \\
+\hline
+I see an error message. & Check spelling, quotation marks, parentheses, brackets, and commas. Small details matter in programming. \\
+\hline
+\texttt{CodeTimer} is not found. & Go back and run the Teacher Setup cell again. \\
+\hline
+My graph looks different from another student's graph. & That is normal. Different computers and Colab sessions may produce different runtimes. Look for the general pattern. \\
+\hline
+I downloaded the wrong file. & You must download the \texttt{.py} file, not the \texttt{.ipynb} notebook file. \\
+\hline
+\end{longtable}
+\end{center}
+
+\section*{Part 13: Download Your Python File}
+
+When your work is finished, download your Python file from Google Colab.
+
+\begin{enumerate}
+    \item In Google Colab, click or tap \textbf{File}.
+    \item Click or tap \textbf{Download}.
+    \item Choose \textbf{Download .py}.
+    \item Wait for the file to download.
+\end{enumerate}
+
+\noindent
+Your downloaded file should end with:
+
+\begin{center}
+\texttt{.py}
+\end{center}
+
+\noindent
+Rename the file using this format:
+
+\begin{center}
+\texttt{RuntimeSorting\_YourName.py}
+\end{center}
+
+\noindent
+Example:
+
+\begin{center}
+\texttt{RuntimeSorting\_Phat.py}
+\end{center}
+
+\noindent
+\textbf{Important:} Do not submit a file ending in \texttt{.ipynb}.
+
+\noindent Check your progress:
+
+\begin{itemize}
+    \item[\checkbox] I clicked or tapped \textbf{File}.
+    \item[\checkbox] I clicked or tapped \textbf{Download}.
+    \item[\checkbox] I selected \textbf{Download .py}.
+    \item[\checkbox] I checked that my file ends with \texttt{.py}.
+\end{itemize}
+
+\section*{Part 14: Submit in Microsoft Teams}
+
+Submit your assignment in Microsoft Teams for Education.
+
+\begin{enumerate}
+    \item Open \textbf{Microsoft Teams}.
+    \item Go to the class team for this course.
+    \item Open this assignment.
+    \item Choose the option to \textbf{attach} or \textbf{upload} your work.
+    \item Attach your downloaded Python file.
+    \item Check that the attached file ends with \texttt{.py}.
+    \item Submit or turn in the assignment.
+\end{enumerate}
+
+\noindent
+Do not attach the Colab notebook file.
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Correct} & \textbf{Incorrect} \\
+\hline
+\texttt{RuntimeSorting\_YourName.py} & \texttt{Assignment\_02.ipynb} \\
+\hline
+\end{tabular}
+\end{center}
+
+\section*{Final Checklist}
+
+Before you submit, make sure you completed each item.
+
+\begin{itemize}
+    \item[\checkbox] I opened the starter notebook in Google Colab.
+    \item[\checkbox] I saved a copy in Google Drive.
+    \item[\checkbox] I ran the Teacher Setup cell.
+    \item[\checkbox] I changed the first timing test to use my own name.
+    \item[\checkbox] I ran the sorting experiment with the original list sizes.
+    \item[\checkbox] I changed the list sizes and ran the experiment again.
+    \item[\checkbox] I chose my own list sizes and ran the experiment a third time.
+    \item[\checkbox] I recorded my runtime results.
+    \item[\checkbox] I made a graph in Google Sheets.
+    \item[\checkbox] I answered the reflection questions.
+    \item[\checkbox] I downloaded my work as a \texttt{.py} file.
+    \item[\checkbox] I submitted only the \texttt{.py} file in Microsoft Teams.
+\end{itemize}
+
+\section*{Teacher Check}
+
+\begin{center}
+\begin{tabular}{|>{\raggedright}p{4.3in}|c|}
+\hline
+\textbf{Requirement} & \textbf{Points} \\
+\hline
+Correct \texttt{.py} file submitted, not \texttt{.ipynb} & 2 \\
+\hline
+First timing test runs and uses student's own name & 1 \\
+\hline
+Sorting experiment runs successfully & 2 \\
+\hline
+Student tested at least three sets of list sizes & 2 \\
+\hline
+Runtime results were recorded & 1 \\
+\hline
+Google Sheets graph was created & 1 \\
+\hline
+Reflection questions were completed & 1 \\
+\hline
+\textbf{Total} & \textbf{10} \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{document}
